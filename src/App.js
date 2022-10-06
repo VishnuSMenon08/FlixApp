@@ -1,23 +1,27 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
+import Card from './component/Card.jsx'
 import './App.css';
 
+
 function App() {
+
+  const [data,setData] = useState([])
+  const fetchData =  async () => {
+  const response = await fetch('https://api.flixpremiere.com/v1/films/filter/now_showing?limit=10', {
+      method: 'GET',
+    })
+  const newdata = await response.json()
+  console.log(newdata.films)
+  setData(newdata.films)
+
+  }
+
+  useEffect(()=>{
+    fetchData()
+  },[])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Card filmsData={data}/>
     </div>
   );
 }
